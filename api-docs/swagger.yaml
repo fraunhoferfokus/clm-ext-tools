@@ -1,0 +1,411 @@
+openapi: 3.0.0
+info:
+  title: CLM-EXT-Tools API
+  version: 1.0.0
+  description: API endpoints the clm-ext-tools module offers
+servers:
+  - url: '{scheme}://{hostname}:{port}{path}'
+    description: The production API server
+    variables:
+      hostname:
+        default: localhost
+      port:
+        default: '5006'
+      path:
+        default: ''
+      scheme:
+        default: http
+security:
+  - bearerAuth: []
+paths:
+  /tools/mgmt/tools:
+    get:
+      tags:
+        - mgmt-tools
+      summary: 'Retrieve all tools the user has access to [Minimum Role: "Learner"]'
+      description: Retrieve all tools the user has access to through the group enrollments.
+      parameters:
+        - $ref: '#/components/parameters/accessToken'
+      responses:
+        '200':
+          description: Successfully retrieved all tools
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/Tool'
+                    - type: object
+                      properties:
+                        _id:
+                          type: string
+                          description: The id of the tool.
+                          example: 5f7b1a7b9b0b8a0017a7b1a7
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+        - mgmt-tools
+      summary: 'Create a tool [Minimum Role: "Admin"]'
+      description: Create a tool
+      parameters:
+        - $ref: '#/components/parameters/accessToken'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTool'
+      responses:
+        '200':
+          description: Successfully created tool
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tool'
+        '400':
+          description: Bad request - Invalid input or validation error
+        '401':
+          description: Unauthorized
+  /tools/mgmt/tools/{id}:
+    put:
+      tags:
+        - mgmt-tools
+      summary: 'Update an existing tool [Minimum Role: "Admin"]'
+      description: Modify an existing tool's attributes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tool'
+      parameters:
+        - $ref: '#/components/parameters/accessToken'
+        - in: path
+          name: id
+          description: The id of the tool
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully updated tool
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tool'
+        '400':
+          description: Bad request - Invalid input or validation error
+        '401':
+          description: Unauthorized
+    patch:
+      tags:
+        - mgmt-tools
+      summary: 'Update an existing tool [Minimum Role: "Admin"]'
+      description: Modify an existing tool's attribute
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tool'
+      parameters:
+        - in: path
+          name: id
+          description: The id of the tool
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully partially updated tool
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tool'
+        '400':
+          description: Bad request - Invalid input or validation error
+        '401':
+          description: Unauthorized
+    delete:
+      tags:
+        - mgmt-tools
+      summary: 'Deletes an existing tool [Minimum Role: "Admin"]'
+      description: Delete an existing tool
+      parameters:
+        - in: path
+          name: id
+          description: The id of the tool
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Successfully deleted tool
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+  /{id}/learningObjects/{loId}:
+    post:
+      tags:
+        - mgmt-learningObjects
+      summary: 'Create a relationship between a tool and a learning object [Minimum Role: "Admin"]'
+      description: Create a new relationship between a specified tool and learning object
+      parameters:
+        - in: path
+          name: id
+          description: The id of the tool
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: loId
+          description: The id of the learning object
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully created relationship
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successfully created relationship
+        '400':
+          description: Bad request - Invalid input or validation error
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+    delete:
+      tags:
+        - mgmt-learningObjects
+      summary: 'Delete a relationship between a tool and a learning object [Minimum Role: "Admin"]'
+      description: Delete an existing relationship between a specified tool and learning object
+      parameters:
+        - in: path
+          name: id
+          description: The id of the tool
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: loId
+          description: The id of the learning object
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Successfully deleted relationship
+        '400':
+          description: Bad request - Invalid input or validation error
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found - Relationship does not exist
+        '500':
+          description: Internal Server Error
+components:
+  schemas:
+    relation:
+      type: object
+      properties:
+        fromType:
+          type: string
+          description: The type of the node
+          default: fromTypeNode
+        toType:
+          type: string
+          description: The type of the target node
+          default: toTypeNode
+        fromId:
+          type: string
+          description: The id of the node
+          default: fromNodeId
+        toId:
+          type: string
+          description: The id of the target node
+          default: toNodeId
+        order:
+          type: number
+          description: The order of the relation. Used for example ordering the enrollments of a group/user
+          default: 0
+    AuthType:
+      type: string
+      enum:
+        - BEARER
+        - BASIC
+      description: The authentication type of the tool.
+    ToolType:
+      type: string
+      enum:
+        - LTI13
+        - LTI11
+        - CMI5
+      description: The type of the tool.
+    CustomProperty:
+      type: object
+      properties:
+        in:
+          type: string
+          enum:
+            - HEADER
+            - QUERY
+            - FORM
+          description: The location where the custom property should be applied.
+        key:
+          type: string
+          description: The key for the custom property.
+        value:
+          type: string
+          description: The value for the custom property.
+    AvailabilityHistory:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: The unique identifier for the availability history.
+        id_tool:
+          type: string
+          description: The associated tool identifier.
+        isSuccessful:
+          type: boolean
+          description: Indicates if the tool was successfully available.
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp of the availability check.
+    Tool:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ToolType'
+        launchableUrl:
+          type: string
+          description: The URL where the tool is deployed.
+        username:
+          type: string
+          description: Username to authenticate against the tool.
+        password:
+          type: string
+          description: Password to authenticate against the tool.
+        token:
+          type: string
+          description: Bearer/Basic token.
+        authType:
+          $ref: '#/components/schemas/AuthType'
+        target:
+          type: string
+          description: How the tool should be launched.
+          enum:
+            - iframe
+            - window
+        displayName:
+          type: string
+          description: The display name to show on the frontend.
+        activityId:
+          type: string
+          description: LTI 1.3 specific parameter.
+        customProperties:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomProperty'
+        availabilityHistory:
+          type: array
+          items:
+            $ref: '#/components/schemas/AvailabilityHistory'
+        storageAccess:
+          type: boolean
+          description: If the tool has storage access or not.
+        oidc_login_url:
+          type: string
+          description: OIDC login URL for LTI 1.3.
+        target_link_uri:
+          type: string
+          description: LTI 1.3 specific parameter.
+        client_id:
+          type: string
+          description: LTI 1.3 client ID the tool needs.
+        key_set_url:
+          type: string
+          description: Tool's public key set URL.
+    CreateTool:
+      type: object
+      required:
+        - serviceProviderId
+        - launchableUrl
+        - type
+        - displayName
+      properties:
+        serviceProviderId:
+          type: string
+          description: The Service Provider's ID. This should be a valid ID from the service provider database.
+        launchableUrl:
+          type: string
+          description: The URL where the tool is deployed.
+        username:
+          type: string
+          description: Username to authenticate against the tool.
+        password:
+          type: string
+          description: Password to authenticate against the tool.
+        type:
+          type: string
+          enum:
+            - LTI13
+            - LTI11
+            - CMI5
+          description: The type of the tool.
+        displayName:
+          type: string
+          description: The display name of the tool.
+        customProperties:
+          type: array
+          description: Custom properties for the tool.
+          items:
+            $ref: '#/components/schemas/CustomProperty'
+        activityId:
+          type: string
+          description: LTI 1.3 specific parameter.
+        oidc_login_url:
+          type: string
+          description: OIDC login URL for LTI 1.3.
+        target:
+          type: string
+          description: How the tool should be launched.
+        client_id:
+          type: string
+          description: LTI 1.3 client_id required by the tool.
+        storageAccess:
+          type: boolean
+          description: Indicates if the tool has storage access.
+        key_set_url:
+          type: string
+          description: Tool's public key_set URL.
+  parameters:
+    accessToken:
+      name: x-access-token
+      in: header
+      description: The access token
+      required: true
+      example: exampleAccessToken
+      schema:
+        type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+    refreshAuth:
+      type: apiKey
+      in: header
+      name: x-refresh-token
+tags: []
