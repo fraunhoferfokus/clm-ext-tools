@@ -29,7 +29,6 @@
  * -----------------------------------------------------------------------------
  */
 
-console.log(process.env.MARIA_CONFIG)
 import dotenv from 'dotenv'
 dotenv.config()
 import { AuthGuard, errHandler, pathBDTOInstance} from "clm-core"
@@ -69,7 +68,7 @@ Promise.all([
     pathBDTOInstance.registerRoutes(app, ECLUDED_PATHS),
 ]).then(() => {
     app.listen(PORT, () => {
-        console.log("listening for too‘ls")
+        console.log(`Tools server is running on port ${PORT}`)
     })
 })
 

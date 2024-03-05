@@ -1,5 +1,4 @@
 "use strict";
-
 /* -----------------------------------------------------------------------------
  *  Copyright (c) 2023, Fraunhofer-Gesellschaft zur Förderung der angewandten Forschung e.V.
  *
@@ -13,7 +12,7 @@
  *  GNU Affero General Public License for more details.
  *
  *  You should have received a copy of the GNU Affero General Public License
- *  along with this program. If not, see <https://www.gnu.org/licenses/>.  
+ *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
  *  No Patent Rights, Trademark Rights and/or other Intellectual Property
  *  Rights other than the rights under this license are granted.
@@ -21,7 +20,7 @@
  *
  *  For any other rights, a separate agreement needs to be closed.
  *
- *  For more information please contact:  
+ *  For more information please contact:
  *  Fraunhofer FOKUS
  *  Kaiserin-Augusta-Allee 31
  *  10589 Berlin, Germany
@@ -41,7 +40,7 @@ var AuthType;
 (function (AuthType) {
     AuthType["BEARER"] = "BEARER";
     AuthType["BASIC"] = "BASIC";
-})(AuthType = exports.AuthType || (exports.AuthType = {}));
+})(AuthType || (exports.AuthType = AuthType = {}));
 /**
  * @public
  * Part of the payload of {@link iToolModel}
@@ -52,7 +51,7 @@ var ToolType;
     ToolType["LTI11"] = "LTI11";
     ToolType["CMI5"] = "CMI5";
     ToolType["METADATA"] = "METADATA";
-})(ToolType = exports.ToolType || (exports.ToolType = {}));
+})(ToolType || (exports.ToolType = ToolType = {}));
 /**
  * @public
  * Tool datamodel which is used by {@link ToolBDTO}

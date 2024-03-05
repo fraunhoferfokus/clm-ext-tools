@@ -12,7 +12,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-
 /* -----------------------------------------------------------------------------
  *  Copyright (c) 2023, Fraunhofer-Gesellschaft zur Förderung der angewandten Forschung e.V.
  *
@@ -26,7 +25,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  *  GNU Affero General Public License for more details.
  *
  *  You should have received a copy of the GNU Affero General Public License
- *  along with this program. If not, see <https://www.gnu.org/licenses/>.  
+ *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
  *  No Patent Rights, Trademark Rights and/or other Intellectual Property
  *  Rights other than the rights under this license are granted.
@@ -34,7 +33,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  *
  *  For any other rights, a separate agreement needs to be closed.
  *
- *  For more information please contact:  
+ *  For more information please contact:
  *  Fraunhofer FOKUS
  *  Kaiserin-Augusta-Allee 31
  *  10589 Berlin, Germany
@@ -201,9 +200,15 @@ class MgtmToolController extends clm_core_1.BaseModelController {
     constructor() {
         super(...arguments);
         this.getToolRelations = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            var _a, _b;
             try {
                 const allRelations = yield clm_core_1.relationBDTOInstance.findAll();
                 const relations = allRelations.filter(relation => relation.fromType === 'tool');
+                if (!((_a = req.requestingUser) === null || _a === void 0 ? void 0 : _a.isSuperAdmin)) {
+                    let userPermissions = (_b = req.requestingUser) === null || _b === void 0 ? void 0 : _b.permissions;
+                    let filteredRelations = relations.filter((relation) => userPermissions[relation._id]);
+                    return res.json(filteredRelations);
+                }
                 return res.json(relations);
             }
             catch (err) {
@@ -269,13 +274,12 @@ controller.router.use(clm_core_1.AuthGuard.requireUserAuthentication());
  *       401:
  *         description: Unauthorized
  */
-controller.router.get('/', clm_core_1.AuthGuard.requireMinimumRole('INSTRUCTOR'));
-controller.router.post('/', clm_core_1.AuthGuard.requireMinimumRole('ADMIN', [{
-        containedIn: 'body',
+controller.router.get('/', clm_core_1.AuthGuard.permissionChecker('tool'));
+controller.router.post('/', clm_core_1.AuthGuard.permissionChecker('tool', [{
+        in: 'body',
         name: 'serviceProviderId',
-        type: 'service',
     }]), ToolValidation_1.createToolValidation);
-controller.router.get('/relations', clm_core_1.AuthGuard.requireMinimumRole('INSTRUCTOR'), controller.getToolRelations);
+controller.router.get('/relations', clm_core_1.AuthGuard.permissionChecker('tool'), controller.getToolRelations);
 /**
  * @openapi
  *
@@ -360,9 +364,49 @@ controller.router.get('/relations', clm_core_1.AuthGuard.requireMinimumRole('INS
  *       401:
  *         description: Unauthorized
  */
-controller.router.delete('/:id', clm_core_1.AuthGuard.requireMinimumRole('ADMIN'));
-controller.router.put('/:id', clm_core_1.AuthGuard.requireMinimumRole('ADMIN'));
-controller.router.patch('/:id', clm_core_1.AuthGuard.requireMinimumRole('ADMIN'), ToolValidation_1.updateToolValidation);
+controller.router.delete('/:id', clm_core_1.AuthGuard.permissionChecker('tool'));
+controller.router.put('/:id', clm_core_1.AuthGuard.permissionChecker('tool'));
+controller.router.patch('/:id', clm_core_1.AuthGuard.permissionChecker('tool'), ToolValidation_1.updateToolValidation);
+/**
+ * @openapi
+ *
+ * /{id}/learningObjects/{loId}:
+ *   post:
+ *     tags:
+ *       - mgmt-learningObjects
+ *     summary: 'Create a relationship between a tool and a learning object [Minimum Role: "Admin"]'
+ *     description: Create a new relationship between a specified tool and learning object
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         description: The id of the tool
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: loId
+ *         description: The id of the learning object
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successfully created relationship
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'Successfully created relationship'
+ *       400:
+ *         description: Bad request - Invalid input or validation error
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal Server Error
+ */
 controller.router.post('/:id/learningObjects/:loId', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const tool = yield ToolDAO_1.default.findById(req.params.id);
@@ -379,6 +423,40 @@ controller.router.post('/:id/learningObjects/:loId', (req, res, next) => __await
         return next(err);
     }
 }));
+/**
+ * @openapi
+ *
+ * /{id}/learningObjects/{loId}:
+ *   delete:
+ *     tags:
+ *       - mgmt-learningObjects
+ *     summary: 'Delete a relationship between a tool and a learning object [Minimum Role: "Admin"]'
+ *     description: Delete an existing relationship between a specified tool and learning object
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         description: The id of the tool
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: loId
+ *         description: The id of the learning object
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: Successfully deleted relationship
+ *       400:
+ *         description: Bad request - Invalid input or validation error
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Not Found - Relationship does not exist
+ *       500:
+ *         description: Internal Server Error
+ */
 controller.router.delete('/:id/learningObjects/:loId', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const tool = yield ToolDAO_1.default.findById(req.params.id);
