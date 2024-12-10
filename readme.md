@@ -108,5 +108,5 @@ We will be happy to answer your questions at {clm@fokus.fraunhofer.de}
 
 ## License
 
-The project is made available under the license in the file [license.txt](LICENSE.txt)
+The project is made available under the license in the file [license.txt](license.txt)
 
