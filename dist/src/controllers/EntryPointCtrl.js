@@ -1,8 +1,3 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
 /* -----------------------------------------------------------------------------
  *  Copyright (c) 2023, Fraunhofer-Gesellschaft zur Förderung der angewandten Forschung e.V.
  *
@@ -32,6 +27,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
  *  famecontact@fokus.fraunhofer.de
  * -----------------------------------------------------------------------------
  */
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const MgtmToolController_1 = __importDefault(require("./MgtmToolController"));
 const entryPointRouter = express_1.default.Router();

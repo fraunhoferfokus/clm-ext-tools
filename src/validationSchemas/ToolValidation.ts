@@ -1,4 +1,3 @@
-
 /* -----------------------------------------------------------------------------
  *  Copyright (c) 2023, Fraunhofer-Gesellschaft zur Förderung der angewandten Forschung e.V.
  *
@@ -129,8 +128,16 @@ const createToolSchema: Schema = {
     },
     key_set_url: {
         optional: true,
+    },
+    jwks_url: {
+        optional: true,
+    },
+    deployment_id: {
+        optional: true,
+    },
+    redirect_uris: {
+        optional: true
     }
-
 
 }
 
@@ -223,6 +230,15 @@ const updateToolSChema: Schema = {
         optional: true,
     },
     authType: {
+        optional: true
+    },
+    jwks_url: {
+        optional: true,
+    },
+    deployment_id: {
+        optional: true,
+    },
+    redirect_uris: {
         optional: true
     }
 }

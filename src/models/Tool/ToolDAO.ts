@@ -32,7 +32,7 @@
 import { BaseDAO, relationBDTOInstance, RelationModel } from "clm-core";
 import ToolModel from "./ToolModel";
 
-class ToolDAO extends BaseDAO<ToolModel>{
+class ToolDAO extends BaseDAO<ToolModel> {
 
 
 
@@ -40,8 +40,7 @@ class ToolDAO extends BaseDAO<ToolModel>{
         return super.insert(payload).then((doc) =>
             Promise.all([
                 relationBDTOInstance.createRelationship(
-                    new RelationModel({ fromId: options.serviceProviderId, fromType: 'service', toType: 'tool', toId: doc._id! }))
-                ,
+                    new RelationModel({ fromId: options.serviceProviderId, fromType: 'service', toType: 'tool', toId: doc._id! })),
                 doc]
             )
         ).then(([, doc]) => doc)

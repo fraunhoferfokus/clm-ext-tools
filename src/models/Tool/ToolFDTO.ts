@@ -1,4 +1,3 @@
-
 /* -----------------------------------------------------------------------------
  *  Copyright (c) 2023, Fraunhofer-Gesellschaft zur Förderung der angewandten Forschung e.V.
  *
@@ -56,7 +55,22 @@ interface iCochToolFDTO extends iBaseFrontendDTO {
         timestamp: Date
     }],
     storageAccess: boolean,
+    /**
+ * tools public key_set url 
+ */
     key_set_url?: string
+    /**
+ * tools public key_set url 
+ */
+    jwks_url?: string
+    /**
+* tools public key_set url 
+*/
+    deployment_id?: string
+    /**
+* tools public key_set url 
+*/
+    redirect_uris?: string[]
 }
 
 
@@ -81,7 +95,21 @@ export default class CouchToolFDTO extends BaseFrontendDTO implements iCochToolF
         this.authType = payload.authType
         this.storageAccess = payload.storageAccess
         this.key_set_url = payload.key_set_url
+        // lti 1.3 parameters
+        this.jwks_url = payload.jwks_url
+        this.redirect_uris = payload.redirect_uris
+        this.oidc_login_url = payload.oidc_login_url
+        this.deployment_id = payload.deployment_id
+        this.target_link_uri = payload.target_link_uri || payload.launchableUrl
+        this.key_set_url = payload.key_set_url
+        this.client_id = payload.client_id
+
     }
+
+    key_set_url?: string;
+    redirect_uris?: string[] | undefined;
+    deployment_id?: string | undefined;
+    jwks_url?: string | undefined;
     storageAccess: boolean;
     type: ToolType;
     launchableUrl: string;
@@ -97,6 +125,5 @@ export default class CouchToolFDTO extends BaseFrontendDTO implements iCochToolF
     activityId?: string;
     customProperties: [{ in: 'HEADER' | 'QUERY' | 'FORM'; key: string; value: string; }];
     availabilityHistory: [{ _id: string; id_tool: string; isSuccessful: boolean; timestamp: Date; }];
-    key_set_url?: string 
 
 }

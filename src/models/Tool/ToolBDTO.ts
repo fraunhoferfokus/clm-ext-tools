@@ -1,4 +1,3 @@
-
 /* -----------------------------------------------------------------------------
  *  Copyright (c) 2023, Fraunhofer-Gesellschaft zur Förderung der angewandten Forschung e.V.
  *
@@ -31,7 +30,7 @@
 
 
 import { BaseBackendDTO } from "clm-core"
-import ToolModel from './ToolModel'
+import ToolModel, { ToolType } from './ToolModel'
 import ToolDAO from './ToolDAO'
 
 /**
@@ -40,7 +39,17 @@ import ToolDAO from './ToolDAO'
  * Uses as default MariaDB Adapter
  * @public 
  */
-export class ToolBDTO extends BaseBackendDTO<ToolModel>{ }
+export class ToolBDTO extends BaseBackendDTO<ToolModel> {
+
+    createMetadataTool(payload: ToolModel, serviceProviderId: string) {
+        return ToolDAO.insert({ ...payload, type: ToolType.METADATA } as ToolModel, { serviceProviderId })
+    }
+
+    deleteById(toolId: string): Promise<boolean> {
+        return ToolDAO.deleteById(toolId)
+    }
+
+}
 
 /**
  * Instance of {@link ToolBDTO}

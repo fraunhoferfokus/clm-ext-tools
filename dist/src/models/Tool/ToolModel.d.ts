@@ -105,6 +105,18 @@ export interface iToolModel extends iBaseDatamodel {
      * tools public key_set url
      */
     key_set_url?: string;
+    /**
+ * tools public key_set url
+ */
+    jwks_url?: string;
+    /**
+* tools public key_set url
+*/
+    deployment_id?: string;
+    /**
+* tools public key_set url
+*/
+    redirect_uris?: string[];
 }
 /**
  * @public
@@ -113,6 +125,9 @@ export interface iToolModel extends iBaseDatamodel {
 export default class ToolModel extends BaseDatamodel implements iToolModel {
     constructor(payload: iToolModel);
     key_set_url?: string;
+    redirect_uris?: string[] | undefined;
+    deployment_id?: string | undefined;
+    jwks_url?: string | undefined;
     customProperties?: CustomProperty[];
     availabilityHistory?: AvailabilityHistory[];
     storageAccess?: boolean;

@@ -1,5 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /* -----------------------------------------------------------------------------
  *  Copyright (c) 2023, Fraunhofer-Gesellschaft zur Förderung der angewandten Forschung e.V.
  *
@@ -29,6 +27,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
  *  famecontact@fokus.fraunhofer.de
  * -----------------------------------------------------------------------------
  */
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const clm_core_1 = require("clm-core");
 class CouchToolFDTO extends clm_core_1.BaseFrontendDTO {
     constructor(payload) {
@@ -50,6 +50,14 @@ class CouchToolFDTO extends clm_core_1.BaseFrontendDTO {
         this.authType = payload.authType;
         this.storageAccess = payload.storageAccess;
         this.key_set_url = payload.key_set_url;
+        // lti 1.3 parameters
+        this.jwks_url = payload.jwks_url;
+        this.redirect_uris = payload.redirect_uris;
+        this.oidc_login_url = payload.oidc_login_url;
+        this.deployment_id = payload.deployment_id;
+        this.target_link_uri = payload.target_link_uri || payload.launchableUrl;
+        this.key_set_url = payload.key_set_url;
+        this.client_id = payload.client_id;
     }
 }
 exports.default = CouchToolFDTO;

@@ -29,10 +29,29 @@ interface iCochToolFDTO extends iBaseFrontendDTO {
         }
     ];
     storageAccess: boolean;
+    /**
+ * tools public key_set url
+ */
     key_set_url?: string;
+    /**
+ * tools public key_set url
+ */
+    jwks_url?: string;
+    /**
+* tools public key_set url
+*/
+    deployment_id?: string;
+    /**
+* tools public key_set url
+*/
+    redirect_uris?: string[];
 }
 export default class CouchToolFDTO extends BaseFrontendDTO implements iCochToolFDTO {
     constructor(payload: iCochToolFDTO);
+    key_set_url?: string;
+    redirect_uris?: string[] | undefined;
+    deployment_id?: string | undefined;
+    jwks_url?: string | undefined;
     storageAccess: boolean;
     type: ToolType;
     launchableUrl: string;
@@ -57,6 +76,5 @@ export default class CouchToolFDTO extends BaseFrontendDTO implements iCochToolF
         isSuccessful: boolean;
         timestamp: Date;
     }];
-    key_set_url?: string;
 }
 export {};

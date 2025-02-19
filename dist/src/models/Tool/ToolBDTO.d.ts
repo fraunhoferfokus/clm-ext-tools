@@ -7,6 +7,8 @@ import ToolModel from './ToolModel';
  * @public
  */
 export declare class ToolBDTO extends BaseBackendDTO<ToolModel> {
+    createMetadataTool(payload: ToolModel, serviceProviderId: string): Promise<ToolModel>;
+    deleteById(toolId: string): Promise<boolean>;
 }
 /**
  * Instance of {@link ToolBDTO}

@@ -1,4 +1,3 @@
-
 /* -----------------------------------------------------------------------------
  *  Copyright (c) 2023, Fraunhofer-Gesellschaft zur Förderung der angewandten Forschung e.V.
  *
@@ -145,7 +144,18 @@ export interface iToolModel extends iBaseDatamodel {
      * tools public key_set url 
      */
     key_set_url?: string
-
+    /**
+ * tools public key_set url 
+ */
+    jwks_url?: string
+    /**
+* tools public key_set url 
+*/
+    deployment_id?: string
+    /**
+* tools public key_set url 
+*/
+    redirect_uris?: string[]
 
 }
 
@@ -178,14 +188,19 @@ export default class ToolModel extends BaseDatamodel implements iToolModel {
         this.availabilityHistory = payload.availabilityHistory
 
         // lti 1.3 parameters
+        this.jwks_url = payload.jwks_url
+        this.redirect_uris = payload.redirect_uris
         this.oidc_login_url = payload.oidc_login_url
+        this.deployment_id = payload.deployment_id
         this.target_link_uri = payload.target_link_uri || payload.launchableUrl
         this.key_set_url = payload.key_set_url
         this.client_id = payload.client_id
         if (payload.type === 'LTI13' && this.client_id === 'undefined') this.client_id = uuid()
     }
     key_set_url?: string;
-
+    redirect_uris?: string[] | undefined;
+    deployment_id?: string | undefined;
+    jwks_url?: string | undefined;
     customProperties?: CustomProperty[]
     availabilityHistory?: AvailabilityHistory[]
     storageAccess?: boolean;

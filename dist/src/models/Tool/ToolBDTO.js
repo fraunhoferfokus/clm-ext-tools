@@ -1,4 +1,3 @@
-"use strict";
 /* -----------------------------------------------------------------------------
  *  Copyright (c) 2023, Fraunhofer-Gesellschaft zur Förderung der angewandten Forschung e.V.
  *
@@ -28,12 +27,14 @@
  *  famecontact@fokus.fraunhofer.de
  * -----------------------------------------------------------------------------
  */
+"use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.toolBDTOInstance = exports.ToolBDTO = void 0;
 const clm_core_1 = require("clm-core");
+const ToolModel_1 = require("./ToolModel");
 const ToolDAO_1 = __importDefault(require("./ToolDAO"));
 /**
  * Extends {@link https://gitlab.fokus.fraunhofer.de/learning-technologies/clm-framework/clm-core/-/blob/dev/docs/clm-core.basebackenddto.md|BaseBackendDTO}
@@ -42,6 +43,12 @@ const ToolDAO_1 = __importDefault(require("./ToolDAO"));
  * @public
  */
 class ToolBDTO extends clm_core_1.BaseBackendDTO {
+    createMetadataTool(payload, serviceProviderId) {
+        return ToolDAO_1.default.insert(Object.assign(Object.assign({}, payload), { type: ToolModel_1.ToolType.METADATA }), { serviceProviderId });
+    }
+    deleteById(toolId) {
+        return ToolDAO_1.default.deleteById(toolId);
+    }
 }
 exports.ToolBDTO = ToolBDTO;
 /**

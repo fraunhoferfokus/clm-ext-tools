@@ -1,4 +1,3 @@
-
 /* -----------------------------------------------------------------------------
  *  Copyright (c) 2023, Fraunhofer-Gesellschaft zur Förderung der angewandten Forschung e.V.
  *
@@ -68,7 +67,7 @@ Promise.all([
     pathBDTOInstance.registerRoutes(app, ECLUDED_PATHS),
 ]).then(() => {
     app.listen(PORT, () => {
-        console.log(`Tools server is running on port ${PORT}`)
+        console.log("listening for too‘ls")
     })
 })
 

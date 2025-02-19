@@ -1,4 +1,3 @@
-"use strict";
 /* -----------------------------------------------------------------------------
  *  Copyright (c) 2023, Fraunhofer-Gesellschaft zur Förderung der angewandten Forschung e.V.
  *
@@ -28,10 +27,12 @@
  *  famecontact@fokus.fraunhofer.de
  * -----------------------------------------------------------------------------
  */
+"use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+console.log(process.env.MARIA_CONFIG);
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const clm_core_1 = require("clm-core");
@@ -60,6 +61,6 @@ Promise.all([
     clm_core_1.pathBDTOInstance.registerRoutes(app, ECLUDED_PATHS),
 ]).then(() => {
     app.listen(PORT, () => {
-        console.log(`Tools server is running on port ${PORT}`);
+        console.log("listening for too‘ls");
     });
 });
