@@ -1,3 +1,4 @@
+"use strict";
 /* -----------------------------------------------------------------------------
  *  Copyright (c) 2023, Fraunhofer-Gesellschaft zur Förderung der angewandten Forschung e.V.
  *
@@ -27,7 +28,6 @@
  *  famecontact@fokus.fraunhofer.de
  * -----------------------------------------------------------------------------
  */
-"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ToolType = exports.AuthType = void 0;
 const clm_core_1 = require("clm-core");
